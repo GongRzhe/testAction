@@ -1,0 +1,38 @@
+name: Issue Enhancement
+on:
+  issues:
+    types: [opened]
+
+jobs:
+  enhance-issue:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Add labels
+        uses: andymckay/labeler@master
+        with:
+          add-labels: "needs-triage"
+          
+      - name: Auto assign
+        uses: kentaro-m/auto-assign-action@v1.2.5
+        
+      - name: Welcome message
+        uses: peter-evans/create-or-update-comment@v3
+        with:
+          issue-number: ${{ github.event.issue.number }}
+          body: |
+            👋 Thanks for opening this issue!
+            
+            Our team will review it shortly. Meanwhile:
+            - Check our [documentation](link)
+            - Search for [similar issues](link)
+            
+            Project status: 🟢 Active
+
+      - name: Add to project board
+        uses: alex-page/github-project-automation-plus@v0.8.3
+        with:
+          project: "Development"
+          column: "To do"
+          repo-token: ${{ secrets.PAT_TOKEN }}
