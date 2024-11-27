@@ -1,14 +1,17 @@
-name: Basic CI
+name: Issue Enhancement
 on:
-  push:
-    branches: [ main ]
+  issues:
+    types: [opened]
   pull_request:
-    branches: [ main ]
+    types: [opened]
 
 jobs:
-  build:
+  enhance-issue:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Test workflow
-        run: echo "Hello from GitHub Actions!"
+      - name: Auto assign
+        uses: kentaro-m/auto-assign-action@v1.2.5
+        with:
+          repo-token: ${{ secrets.PAT_TOKEN }}
+          configuration-path: .github/auto_assign.yml
